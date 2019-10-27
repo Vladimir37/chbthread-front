@@ -11,11 +11,6 @@ Vue.use(BootstrapVue);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  data() {
-    return {
-      apiUrl: 'http://localhost:3000',
-    };
-  },
   router,
   components: { App },
   template: '<App/>'
