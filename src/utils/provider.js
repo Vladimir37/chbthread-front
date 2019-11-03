@@ -1,7 +1,8 @@
 import axios from 'axios';
+import config from '../config';
 
 export default axios.create({
-    baseURL: 'http://test.ru:3000/',
+    baseURL: config.apiUrl,
     timeout: 1000,
     headers: {'Access-Control-Allow-Credentials': true},
     withCredentials: true,
