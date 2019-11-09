@@ -36,6 +36,7 @@ let router = new Router({
       component: AdminList,
       meta: {
         admin: true,
+        layout: 'admin'
       },
     },
     {
@@ -44,6 +45,7 @@ let router = new Router({
       component: ProfileList,
       meta: {
         auth: true,
+        layout: 'admin'
       },
     },
     {

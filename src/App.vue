@@ -1,12 +1,17 @@
 <template>
   <div id="app">
-    <router-view/>
+    <vue-extend-layouts/>
   </div>
 </template>
 
 <script>
+import VueExtendLayouts from 'vue-extend-layout'
+
 export default {
-  name: 'Chbthread'
+  name: 'Chbthread',
+  components: {
+    VueExtendLayouts,
+  }
 }
 </script>
 

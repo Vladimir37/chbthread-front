@@ -6,8 +6,6 @@
       <captcha @captchaChanged="captchaUpdate" :updateCount="captchaUpdateCount" />
       <b-alert :show="errMessage" variant="danger">{{ errMessage }}</b-alert>
       <b-button variant="outline-primary" class="elem" @click="auth">Войти</b-button>
-      <b-button variant="outline-primary" class="elem" @click="check">Проверка</b-button>
-      <b-button variant="outline-primary" class="elem" @click="logout">Выйти</b-button>
     </div>
   </div>
 </template>
@@ -58,20 +56,6 @@ export default {
           this.errMessage = 'Неизвестная ошибка';
         }
       }
-    },
-    check() {
-      provider.get('/auth/status').then(res => {
-        console.log(res.data);
-      }).catch(err => {
-        console.log(err);
-      });
-    },
-    logout() {
-      provider.post('/auth/logout').then(res => {
-        console.log(res.data);
-      }).catch(err => {
-        console.log(err);
-      });
     },
     captchaUpdate(val) {
       this.captcha = val;
