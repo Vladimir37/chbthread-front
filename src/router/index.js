@@ -1,17 +1,26 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
+import ServerError from '@/components/errors/ServerError'
+import NotFoundError from '@/components/errors/NotFoundError'
 import Login from '@/components/Login'
 import AdminList from '@/components/AdminList'
+import ProfileList from '@/components/ProfileList'
+import provider from '../utils/provider'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '/',
       name: 'HelloWorld',
       component: HelloWorld
+    },
+    {
+      path: '/error',
+      name: 'ServerError',
+      component: ServerError
     },
     {
       path: '/auth',
@@ -23,11 +32,69 @@ export default new Router({
     },
     {
       path: '/admins',
-      name: 'Admin',
+      name: 'AdminList',
       component: AdminList,
       meta: {
         admin: true,
       },
     },
+    {
+      path: '/profiles',
+      name: 'ProfileList',
+      component: ProfileList,
+      meta: {
+        auth: true,
+      },
+    },
+    {
+      path: '*',
+      name: 'Error404',
+      component: NotFoundError,
+    },
   ]
-})
+});
+
+router.beforeEach(async (to, from, next) => {
+  let response;
+  try {
+    const res = await provider.get('/auth/status');
+    response = res.data;
+  } catch (err) {
+    console.log(err);
+    next({
+      path: '/error',
+    });
+  }
+  if (to.matched.some(record => record.meta.admin)) {
+    if (!response.logged) {
+      next({
+        path: '/auth',
+      })
+    } else if (response.user.status != 0) {
+      next({
+        path: '/profiles',
+      })
+    } else {
+      next()
+    }
+  } else if (to.matched.some(record => record.meta.unauth)) {
+    if (response.logged) {
+      next({
+        path: '/profiles',
+      })
+    } else {
+      next()
+    }
+  } else if (to.matched.some(record => record.meta.auth)) {
+    if (!response.logged) {
+      next({
+        path: '/auth',
+      })
+    }
+    next()
+  } else {
+    next()
+  }
+});
+
+export default router;

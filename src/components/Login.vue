@@ -35,16 +35,19 @@ export default {
     }
   },
   methods: {
-    auth() {
+    async auth() {
       this.errMessage = null;
       const authData = {
         username: this.login,
         password: this.pass,
         captcha: this.captcha,
       };
-      provider.post('/auth/login', authData).then(res => {
-        console.log(res.data);
-      }).catch(err => {
+      try {
+        await provider.post('/auth/login', authData);
+        this.$router.push({
+          path: '/profiles',
+        });
+      } catch(err) {
         this.captchaUpdateCount++;
         const resMessage = err.response.data.message;
         if (resMessage === 'captcha') {
@@ -54,7 +57,7 @@ export default {
         } else {
           this.errMessage = 'Неизвестная ошибка';
         }
-      });
+      }
     },
     check() {
       provider.get('/auth/status').then(res => {
@@ -81,6 +84,7 @@ export default {
 .loginContainer {
   max-width: 350px;
   margin: 0 auto;
+  margin-top: 60px;
 }
 .elem {
   margin-bottom: 30px;
