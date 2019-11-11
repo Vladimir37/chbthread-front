@@ -40,6 +40,12 @@ export default {
         password: this.pass,
         captcha: this.captcha,
       };
+      
+      if (!authData.username || !authData.password || !authData.captcha) {
+        this.errMessage = 'Не все поля заполнены!';
+        return;
+      }
+
       try {
         await provider.post('/auth/login', authData);
         this.$router.push({

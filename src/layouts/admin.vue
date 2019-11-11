@@ -2,14 +2,15 @@
     <div>
         <b-navbar toggleable="lg" type="dark" variant="info">
             <div class="container">
+                <b-navbar-nav>
+                    <b-nav-item to="/">
+                        <b>Главная</b>
+                    </b-nav-item>
+                </b-navbar-nav>
                 <b-navbar-nav class="ml-auto">
-                    <b-nav-item href="#">
-                        <router-link class="topLink" to="/admins">Админы</router-link>
-                    </b-nav-item>
-                    <b-nav-item href="#">
-                        <router-link class="topLink" to="/profiles">Профили</router-link>
-                    </b-nav-item>
-                    <b-nav-item @click="logout" href="#">Выход</b-nav-item>
+                    <b-nav-item to="/admins">Админы</b-nav-item>
+                    <b-nav-item to="/profiles">Профили</b-nav-item>
+                    <b-nav-item @click="logout">Выход</b-nav-item>
                 </b-navbar-nav>
             </div>
         </b-navbar>
