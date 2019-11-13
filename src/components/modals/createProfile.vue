@@ -51,7 +51,7 @@
                     max-rows="12"
                 />
                 <p class="textLabel">Контакты:</p>
-                <b-form-input type="text" placeholder="@telega, /vkontakt, pochta@mail.ru" v-model="form.contacts" />
+                <b-form-input type="text" placeholder="@telegram, /vk, pochta@mail.ru" v-model="form.contacts" />
                 <div class="captcha">
                     <captcha @captchaChanged="captchaUpdate" :updateCount="captchaUpdateCount" />
                 </div>
@@ -143,6 +143,21 @@ export default {
             return Number.isInteger(this.form.gender) && Number.isInteger(this.form.targetGender) &&
                 this.form.aboutMe && this.form.aboutTarget && this.form.age && 
                 this.form.city && this.form.contacts;
+        },
+        checkLength() {
+            if (this.form.city.length > 100) {
+                return 'Город';
+            }
+            if (this.form.contacts.length > 100) {
+                return 'Контакты';
+            }
+            if (this.form.aboutMe.length > 5000) {
+                return 'Обо мне';
+            }
+            if (this.form.aboutTarget.length > 5000) {
+                return 'О том, кого я ищу';
+            }
+            return null;
         }
     },
     methods: {
@@ -150,6 +165,10 @@ export default {
             this.errMessage = null;
             if (!this.validForm) {
                 this.errMessage = 'Не все поля заполнены';
+                return;
+            }
+            if (this.checkLength) {
+                this.errMessage = `Поле "${this.checkLength}" слишком длинное. Пожалуйста, сократите его.`;
                 return;
             }
             if (!this.form.age || this.form.age > 99 || this.form.age < 10) {
