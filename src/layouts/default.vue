@@ -4,7 +4,7 @@
         <div class="container">
           <b-navbar-nav>
             <b-nav-item to="/">Главная</b-nav-item>
-            <b-nav-item to="/">Архив</b-nav-item>
+            <b-nav-item to="/archive">Архив</b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
             <b-button variant="primary" @click="openCreateProfile">
@@ -15,7 +15,7 @@
         </div>
       </b-navbar>
       <div class="content">
-          <router-view/>
+          <router-view :updateProfilesCount="updateProfilesCount" />
       </div>
       <remove-profile-modal @success="successHandler" />
       <create-profile-modal @success="successHandler" />
@@ -37,6 +37,11 @@ export default {
     removeProfileModal,
     createProfileModal,
   },
+  data() {
+    return {
+      updateProfilesCount: 0,
+    };
+  },
   methods: {
     openCreateProfile() {
       this.$bvModal.show('createProfileModal');
@@ -45,7 +50,7 @@ export default {
       this.$bvModal.show('removeProfileModal');
     },
     successHandler() {
-      //
+      this.updateProfilesCount++;
     }
   }
 }

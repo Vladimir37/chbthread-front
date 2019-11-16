@@ -11,12 +11,12 @@
                         v-model="form.gender"
                         :options="options.gender"
                         buttons
-                        name="radios-btn-primary"
+                        name="genderRadio"
                     />
                 </b-form-group>
                 <div class="ageBlock">
                     Мне
-                    <b-form-input type="number" placeholder="18" min="10" id="ageField" v-model="form.age" />
+                    <b-form-input type="number" placeholder="18" min="10" v-model="form.age" />
                     лет
                 </div>
                 <div class="cityBlock">
@@ -38,7 +38,7 @@
                         v-model="form.targetGender"
                         :options="options.targetGender"
                         buttons
-                        name="radios-btn-primary"
+                        name="targetGenderRadio"
                     />
                 </b-form-group>
                 <p class="textLabel">О том, кого я ищу:</p>
@@ -72,7 +72,7 @@
                 <b-button variant="primary" @click="createProfile">Отправить</b-button>
             </div>
             <div v-else>
-                <b-button variant="primary" @click="$bvModal.hide('createProfileModal')">Готово</b-button>
+                <b-button variant="primary" @click="successClose">Готово</b-button>
             </div>
         </template>
     </b-modal>
@@ -197,6 +197,10 @@ export default {
                     this.errMessage = 'Неизвестная ошибка';
                 }
             }
+        },
+        successClose() {
+            this.$emit('success');
+            this.$bvModal.hide('createProfileModal');
         },
         captchaUpdate(val) {
             this.captcha = val;

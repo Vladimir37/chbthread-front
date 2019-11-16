@@ -1,6 +1,15 @@
 <template>
-    <div class="container profileContainer">
-        <b-table striped hover class="profileTable" :items="profilesList" :fields="fields">
+    <div class="container profileContainer" ref='main'>
+        <filters @filterChanged="filterChanged" />
+        <b-alert :show="errMessage" variant="danger">{{ errMessage }}</b-alert>
+        <b-table 
+            striped 
+            hover 
+            class="profileTable" 
+            v-if="visibleProfiles.length" 
+            :items="visibleProfiles" 
+            :fields="fields"
+        >
             <template v-slot:cell(aboutTarget)="data">
                 <collapsed-text :text="data.item.aboutTarget" />
             </template>
@@ -8,12 +17,18 @@
                 <collapsed-text :text="data.item.aboutMe" />
             </template>
         </b-table>
+        <h2 v-else-if="profilesList && profilesList.length">Нет анкет, соответствующих критериям поиска.</h2>
+        <h2 v-else>
+            Пока здесь нет анкет. <span class="errLink" @click="openCreate">Создайте первую анкету</span> или загляните в 
+            <span class="errLink" @click="toArchive">архив</span>.
+        </h2>
     </div>
 </template>
 
 <script>
 import { BAlert, BTable } from "bootstrap-vue";
 import moment from 'moment';
+import filters from './elements/filters';
 import collapsedText from './elements/collapsedText';
 import provider from '../utils/provider';
 
@@ -22,12 +37,26 @@ export default {
     components: {
         BAlert, 
         BTable,
+        filters,
         collapsedText,
+    },
+    props: {
+        updateProfilesCount: {
+            type: Number,
+            required: true,
+        },
     },
     data() {
         return {
             profilesList: null,
             errMessage: null,
+            filter: {
+                gender: 2,
+                targetGender: 2,
+                minAge: 10,
+                maxAge: 99,
+                city: '',
+            },
             fields: [
                 {
                     key: 'city',
@@ -98,6 +127,53 @@ export default {
                 console.log(err);
                 this.errMessage = 'Произошла ошибка. Пожалуйста, повторите запрос позже.'
             });
+        },
+        filterChanged(filters) {
+            this.filter = filters;
+        },
+        openCreate() {
+            this.$bvModal.show('createProfileModal');
+        },
+        toArchive() {
+            this.$router.push({
+                path: '/archive',
+            });
+        }
+    },
+    computed: {
+        visibleProfiles() {
+            if (!this.profilesList) {
+                return [];
+            }
+
+            let result = [...this.profilesList];
+
+            if (this.filter.gender == 0 || this.filter.gender == 1) {
+                result = result.filter(elem => elem.gender == this.filter.gender);
+            }
+
+            if (this.filter.targetGender == 0 || this.filter.targetGender == 1) {
+                result = result.filter(elem => elem.targetGender == this.filter.targetGender);
+            }
+
+            if (this.filter.minAge) {
+                result = result.filter(elem => elem.age >= this.filter.minAge);
+            }
+
+            if (this.filter.maxAge) {
+                result = result.filter(elem => elem.age <= this.filter.maxAge);
+            }
+
+            if (this.filter.city) {
+                result = result.filter(elem => elem.city.toLowerCase().includes(this.filter.city.toLowerCase()));
+            }
+
+            return result;
+        },
+    },
+    watch: {
+        updateProfilesCount() {
+            this.getProfiles();
         }
     }
 }
@@ -119,5 +195,10 @@ th.sortableCell {
 }
 .targetGenderCell {
     white-space: nowrap;
+}
+.errLink {
+    text-decoration: none;
+    color: #009CDC;
+    cursor: pointer;
 }
 </style>

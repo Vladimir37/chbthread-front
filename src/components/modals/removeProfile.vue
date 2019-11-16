@@ -41,8 +41,38 @@ export default {
         }
     },
     methods: {
-        removeProfile() {
-            //
+        async removeProfile() {
+            this.errMessage = null;
+
+            if (!this.code) {
+                this.errMessage = 'Введите код удаления';
+                return;
+            }
+
+            if (!this.captcha) {
+                this.errMessage = 'Введите числа с картинки';
+                return;
+            }
+
+            try {
+                const form = {
+                    code: this.code,
+                    captcha: this.captcha,
+                };
+                const response = await provider.post('/profiles/removeCode', form);
+                this.$emit('success');
+                this.$bvModal.hide('removeProfileModal');
+            } catch(err) {
+                this.captchaUpdateCount++;
+                const resMessage = err.response.data.message;
+                if (resMessage === 'captcha') {
+                    this.errMessage = 'Неверная капча';
+                } else if (resMessage === 'incorrect_code') {
+                    this.errMessage = 'Неверный код удаления';
+                } else {
+                    this.errMessage = 'Неизвестная ошибка';
+                }
+            }
         },
         captchaUpdate(val) {
             this.captcha = val;

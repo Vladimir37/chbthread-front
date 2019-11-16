@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import MainPage from '@/components/MainPage'
+import Archive from '@/components/Archive'
 import ServerError from '@/components/errors/ServerError'
 import NotFoundError from '@/components/errors/NotFoundError'
 import Login from '@/components/Login'
@@ -16,6 +17,11 @@ let router = new Router({
       path: '/',
       name: 'MainPage',
       component: MainPage
+    },
+    {
+      path: '/archive',
+      name: 'Archive',
+      component: Archive
     },
     {
       path: '/error',
