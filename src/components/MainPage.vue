@@ -1,5 +1,9 @@
 <template>
-    <div class="container profileContainer" ref='main'>
+    <div :class="{
+            container: true,
+            profileContainer: true,
+            emptyContainer: !visibleProfiles.length
+        }">
         <filters @filterChanged="filterChanged" />
         <b-alert :show="errMessage" variant="danger">{{ errMessage }}</b-alert>
         <b-table 
@@ -60,9 +64,9 @@ export default {
             fields: [
                 {
                     key: 'city',
-                    label: 'Город ↑↓',
+                    label: 'Локация ↑↓',
                     sortable: true,
-                    class: 'sortableCell',
+                    class: 'sortableCell autoBreakCell cityCell',
                 },
                 {
                     key: 'gender',
@@ -96,14 +100,17 @@ export default {
                 {
                     key: 'aboutTarget',
                     label: 'Кого хотелось бы найти',
+                    class: 'autoBreakCell'
                 },
                 {
                     key: 'aboutMe',
-                    label: 'О себе',
+                    label: 'Немного информации о себе',
+                    class: 'autoBreakCell'
                 },
                 {
                     key: 'contacts',
                     label: 'Контакты',
+                    class: 'autoBreakCell contactsCell'
                 },
                 {
                     key: 'date',
@@ -184,6 +191,9 @@ export default {
     overflow-x: scroll;
     padding: 0;
 }
+.emptyContainer {
+    overflow-x: auto;
+}
 .profileTable th {
     white-space: nowrap;
 }
@@ -192,6 +202,15 @@ export default {
 }
 th.sortableCell {
     cursor: pointer;
+}
+.autoBreakCell {
+    word-break: break-word;
+}
+.cityCell {
+    min-width: 120px;
+}
+.contactsCell {
+    min-width: 180px;
 }
 .targetGenderCell {
     white-space: nowrap;

@@ -3,8 +3,8 @@
       <b-navbar toggleable="lg" type="dark" variant="info">
         <div class="container">
           <b-navbar-nav>
-            <b-nav-item to="/">Главная</b-nav-item>
-            <b-nav-item to="/archive">Архив</b-nav-item>
+            <b-nav-item :class="mainActiveClass" to="/">Главная</b-nav-item>
+            <b-nav-item :class="archiveActiveClass" to="/archive">Архив</b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
             <b-button variant="primary" @click="openCreateProfile">
@@ -52,6 +52,21 @@ export default {
     successHandler() {
       this.updateProfilesCount++;
     }
+  },
+  computed: {
+    mainActiveClass() {
+      return this.$route.name == 'MainPage' ? 'activeMenuLink' : '';
+    },
+    archiveActiveClass() {
+      return this.$route.name == 'Archive' ? 'activeMenuLink' : '';
+    }
   }
 }
 </script>
+
+<style>
+.activeMenuLink a {
+  font-weight: 600;
+  color: white !important;
+}
+</style>

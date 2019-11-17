@@ -69,7 +69,7 @@
         <template v-slot:modal-footer>
             <div v-if="!sended">
                 <b-button @click="$bvModal.hide('createProfileModal')">Отмена</b-button>
-                <b-button variant="primary" @click="createProfile">Отправить</b-button>
+                <b-button variant="primary" @click="createProfile" :disabled="disableButton">Отправить</b-button>
             </div>
             <div v-else>
                 <b-button variant="primary" @click="successClose">Готово</b-button>
@@ -100,6 +100,7 @@ export default {
             errMessage: null,
             sended: false,
             responseDeleteCode: null,
+            disableButton: false,
             captcha: '',
             form: {
                 gender: null,
@@ -180,6 +181,8 @@ export default {
                 return;
             }
 
+            this.disableButton = true;
+
             try {
                 const form = {
                     ...this.form,
@@ -197,6 +200,7 @@ export default {
                     this.errMessage = 'Неизвестная ошибка';
                 }
             }
+            this.disableButton = false;
         },
         successClose() {
             this.$emit('success');

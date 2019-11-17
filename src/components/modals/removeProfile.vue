@@ -13,7 +13,7 @@
         </div>
         <template v-slot:modal-footer>
             <b-button @click="$bvModal.hide('removeProfileModal')">Отмена</b-button>
-            <b-button variant="danger" @click="removeProfile">Удалить</b-button>
+            <b-button variant="danger" :disabled="disableButton" @click="removeProfile">Удалить</b-button>
         </template>
     </b-modal>
 </template>
@@ -38,6 +38,7 @@ export default {
             code: '',
             captcha: '',
             captchaUpdateCount: 0,
+            disableButton: false,
         }
     },
     methods: {
@@ -53,6 +54,8 @@ export default {
                 this.errMessage = 'Введите числа с картинки';
                 return;
             }
+
+            this.disableButton = true;
 
             try {
                 const form = {
@@ -73,6 +76,7 @@ export default {
                     this.errMessage = 'Неизвестная ошибка';
                 }
             }
+            this.disableButton = false;
         },
         captchaUpdate(val) {
             this.captcha = val;

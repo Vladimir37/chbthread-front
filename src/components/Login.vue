@@ -5,7 +5,7 @@
       <b-form-input type="password" class="elem" placeholder="Пароль" v-model="pass" />
       <captcha @captchaChanged="captchaUpdate" :updateCount="captchaUpdateCount" />
       <b-alert :show="errMessage" variant="danger">{{ errMessage }}</b-alert>
-      <b-button variant="outline-primary" class="elem" @click="auth">Войти</b-button>
+      <b-button variant="outline-primary" :disabled="disableButton" class="elem" @click="auth">Войти</b-button>
     </div>
   </div>
 </template>
@@ -30,6 +30,7 @@ export default {
       captcha: '',
       captchaUpdateCount: 0,
       errMessage: null,
+      disableButton: false,
     }
   },
   methods: {
@@ -45,6 +46,8 @@ export default {
         this.errMessage = 'Не все поля заполнены!';
         return;
       }
+
+      this.disableButton = true;
 
       try {
         await provider.post('/auth/login', authData);
@@ -62,6 +65,7 @@ export default {
           this.errMessage = 'Неизвестная ошибка';
         }
       }
+      this.disableButton = false;
     },
     captchaUpdate(val) {
       this.captcha = val;
