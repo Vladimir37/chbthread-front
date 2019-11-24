@@ -196,6 +196,8 @@ export default {
                 const resMessage = err.response.data.message;
                 if (resMessage === 'captcha') {
                     this.errMessage = 'Неверная капча';
+                } else if (resMessage === 'incorrect_data') {
+                    this.errMessage = 'Некорректные данные. Проверьте анкету и убедитесь, что всё заполнено верно.';
                 } else {
                     this.errMessage = 'Неизвестная ошибка';
                 }
