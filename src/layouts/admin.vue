@@ -8,7 +8,7 @@
                     </b-nav-item>
                 </b-navbar-nav>
                 <b-navbar-nav class="ml-auto">
-                    <b-nav-item to="/admins">Админы</b-nav-item>
+                    <b-nav-item v-if="userStatus == 0" to="/admins">Админы</b-nav-item>
                     <b-nav-item to="/profiles">Анкеты</b-nav-item>
                     <b-nav-item @click="logout">Выход</b-nav-item>
                 </b-navbar-nav>
@@ -31,16 +31,33 @@ export default {
         BNavbarNav, 
         BNavItem,
     },
+    data() {
+        return {
+            userStatus: 1,
+        };
+    },
+    mounted() {
+        this.getStatus();
+    },
     methods: {
-        logout() {
-            provider.post('/auth/logout').then(res => {
+        async logout() {
+            try {
+                await provider.post('/auth/logout');
                 this.$router.push({
                     path: '/auth',
                 });
-            }).catch(err => {
+            } catch (err) {
                 console.log(err);
-            });
+            }
         },
+        async getStatus() {
+            try {
+                const res = await provider.get('/auth/status');
+                this.userStatus = res.data.user.status;
+            } catch (err) {
+                console.log(err);
+            }
+        }
     }
 }
 </script>
