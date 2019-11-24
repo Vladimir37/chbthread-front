@@ -9,7 +9,7 @@
                 </b-navbar-nav>
                 <b-navbar-nav class="ml-auto">
                     <b-nav-item to="/admins">Админы</b-nav-item>
-                    <b-nav-item to="/profiles">Профили</b-nav-item>
+                    <b-nav-item to="/profiles">Анкеты</b-nav-item>
                     <b-nav-item @click="logout">Выход</b-nav-item>
                 </b-navbar-nav>
             </div>

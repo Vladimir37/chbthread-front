@@ -13,6 +13,10 @@ export default {
             type: String,
             required: true,
         },
+        symbols: {
+            type: Number,
+            default: 530,
+        }
     },
     data() {
         return {
@@ -21,11 +25,11 @@ export default {
     },
     computed: {
         tooLong() {
-            return this.text.length > 530;
+            return this.text.length > this.symbols;
         },
         visibleText() {
             if (this.tooLong && !this.expanded) {
-                return this.text.slice(0, 530) + '... ';
+                return this.text.slice(0, this.symbols) + '... ';
             } 
             return this.text;
         },

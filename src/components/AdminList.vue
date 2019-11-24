@@ -7,7 +7,7 @@
       </div>
       <b-table striped hover :items="list" :fields="fields">
         <template v-slot:cell(remove)="data">
-          <b-button variant="danger" @click="openRemoveModal(data)" >Удалить</b-button>
+          <b-button variant="danger" @click="openRemoveModal(data)">Удалить</b-button>
         </template>
       </b-table>
       <remove-user-modal @success="successHandler" :targetUser="targetUser" />
