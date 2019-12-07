@@ -1,3 +1,3 @@
 export default {
-    apiUrl: "http://test.ru:3000/"
+    apiUrl: "http://68.183.217.212:49001/"
 }
